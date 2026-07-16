@@ -1203,7 +1203,7 @@ export function DatasetTab({
                 <Lock className="w-3 h-3 text-muted-foreground" />
               ) : null}
               {showHeaderMenu && (
-                <DropdownMenu>
+                <DropdownMenu modal={false}>
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"

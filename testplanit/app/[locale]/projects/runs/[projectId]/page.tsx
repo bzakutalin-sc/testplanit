@@ -1354,7 +1354,7 @@ const ProjectTestRuns: React.FC<ProjectTestRunsProps> = ({ params }) => {
                       <span className="text-sm text-muted-foreground">
                         {t("typeFilter.label")}:
                       </span>
-                      <DropdownMenu>
+                      <DropdownMenu modal={false}>
                         <DropdownMenuTrigger asChild>
                           <Button variant="outline" size="sm">
                             {runTypeFilter === "both"
@@ -1421,7 +1421,7 @@ const ProjectTestRuns: React.FC<ProjectTestRunsProps> = ({ params }) => {
                       <span className="text-sm text-muted-foreground">
                         {t("typeFilter.label")}:
                       </span>
-                      <DropdownMenu>
+                      <DropdownMenu modal={false}>
                         <DropdownMenuTrigger asChild>
                           <Button variant="outline" size="sm">
                             {runTypeFilter === "both"

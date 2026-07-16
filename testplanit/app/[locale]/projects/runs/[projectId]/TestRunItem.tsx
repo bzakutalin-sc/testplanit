@@ -405,7 +405,7 @@ const TestRunItem: React.FC<TestRunItemProps> = ({
           </div>
           <div className="flex items-center justify-end space-x-2 pr-1">
             {showMoreMenu && (
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"

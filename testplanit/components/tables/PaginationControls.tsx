@@ -34,7 +34,7 @@ const PaginationInfo: React.FC<PaginationInfoProps> = ({
   return (
     totalRows > 0 && (
       <div className="flex items-center justify-center text-sm text-muted-foreground">
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button variant="link" className="-m-2">
               {totalRows <= 10 || pageSize === "All" || pageSize === totalRows

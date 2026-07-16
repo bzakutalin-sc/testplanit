@@ -176,7 +176,7 @@ export function IterationRow({
 
       {isActive && (
         <span data-iteration-row-stop="" className="ml-auto">
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <button
                 type="button"

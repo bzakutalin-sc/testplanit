@@ -1174,7 +1174,7 @@ const TreeView: React.FC<{
 
         {canAddEdit && !filteredFolders && data?.folderId !== 0 && (
           <div className="ml-1 flex items-center h-7 invisible group-hover:visible shrink-0">
-            <DropdownMenu>
+            <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"

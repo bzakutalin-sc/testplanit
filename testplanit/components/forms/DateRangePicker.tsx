@@ -284,7 +284,7 @@ export function DateRangePicker({
             : tReports("dateRange.chooseEndDate")}
         </div>
         <div className="p-2 border-b border-border">
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"

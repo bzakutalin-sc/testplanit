@@ -1025,6 +1025,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({
             llmIntegrations &&
             llmIntegrations.length > 0 && (
               <DropdownMenu
+                modal={false}
                 onOpenChange={(open) => {
                   if (open) {
                     // Always capture content fresh when opening dropdown

@@ -1233,7 +1233,7 @@ export default function TestResultHistory({
           {!isLoadingTestRunPermissions &&
             canAddEditRun &&
             showAddToTestRun && (
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Button
                     type="button"
@@ -1278,7 +1278,7 @@ export default function TestResultHistory({
           </CardDescription>
         </div>
         {!isLoadingTestRunPermissions && canAddEditRun && showAddToTestRun && (
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button
                 type="button"

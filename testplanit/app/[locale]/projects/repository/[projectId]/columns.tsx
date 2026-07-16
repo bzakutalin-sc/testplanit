@@ -760,7 +760,7 @@ const TestRunStatusCell = React.memo(function TestRunStatusCell({
             <SquareStack className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
           </Button>
         ) : (
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
@@ -803,7 +803,7 @@ const TestRunStatusCell = React.memo(function TestRunStatusCell({
           </DropdownMenu>
         )}
 
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild disabled={isMenuDisabled || isDisabled}>
             <Button
               variant="ghost"
@@ -1036,7 +1036,7 @@ const ActionsCell = React.memo(function ActionsCell({
 
   return (
     <div className="flex justify-center w-full">
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"

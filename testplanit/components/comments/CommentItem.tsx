@@ -254,7 +254,7 @@ export function CommentItem({
               </span>
             )}
             {(canEdit || canDelete) && !isEditing && (
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"

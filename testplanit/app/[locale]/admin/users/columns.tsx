@@ -319,7 +319,7 @@ export const useColumns = (
             isScimProvisioner || row.original.scimGivenName !== null;
           return (
             <div className="flex justify-center">
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"

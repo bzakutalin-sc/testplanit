@@ -2179,7 +2179,7 @@ function ReportBuilderContent({
                             <label className="text-sm font-medium">
                               {tReports("flakyTests.includeFilter")}
                             </label>
-                            <DropdownMenu>
+                            <DropdownMenu modal={false}>
                               <DropdownMenuTrigger asChild>
                                 <Button
                                   type="button"
@@ -2304,7 +2304,7 @@ function ReportBuilderContent({
                                 helpKey={`## ${tReports("testCaseHealth.lookbackDays")}\n${tReports("testCaseHealth.lookbackDaysHelp")}`}
                               />
                             </div>
-                            <DropdownMenu>
+                            <DropdownMenu modal={false}>
                               <DropdownMenuTrigger asChild>
                                 <Button
                                   type="button"
@@ -2352,7 +2352,7 @@ function ReportBuilderContent({
                             <label className="text-sm font-medium">
                               {tReports("testCaseHealth.includeFilter")}
                             </label>
-                            <DropdownMenu>
+                            <DropdownMenu modal={false}>
                               <DropdownMenuTrigger asChild>
                                 <Button
                                   type="button"
@@ -2404,7 +2404,7 @@ function ReportBuilderContent({
                             <label className="text-sm font-medium">
                               {tReports("testCaseHealth.status")}
                             </label>
-                            <DropdownMenu>
+                            <DropdownMenu modal={false}>
                               <DropdownMenuTrigger asChild>
                                 <Button
                                   type="button"
@@ -2489,7 +2489,7 @@ function ReportBuilderContent({
                             <label className="text-sm font-medium">
                               {tReports("testCaseHealth.staleFilter")}
                             </label>
-                            <DropdownMenu>
+                            <DropdownMenu modal={false}>
                               <DropdownMenuTrigger asChild>
                                 <Button
                                   type="button"

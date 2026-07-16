@@ -119,7 +119,7 @@ export function IterationHeader({
             <span>{status.name}</span>
           </span>
         )}
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"

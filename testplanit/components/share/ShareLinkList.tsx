@@ -327,7 +327,7 @@ export function ShareLinkList({
                     )}
                   </TableCell>
                   <TableCell>
-                    <DropdownMenu>
+                    <DropdownMenu modal={false}>
                       <DropdownMenuTrigger asChild>
                         <Button
                           data-testid={`share-actions-${share.id}`}

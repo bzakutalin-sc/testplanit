@@ -779,7 +779,7 @@ export function TestRunCaseDetails({
                       <CheckCircle className="h-4 w-4" />
                       {tCommon("actions.passAndNext")}
                     </Button>
-                    <DropdownMenu>
+                    <DropdownMenu modal={false}>
                       <DropdownMenuTrigger asChild>
                         <Button
                           type="button"
@@ -1050,7 +1050,7 @@ export function TestRunCaseDetails({
             </div>
           ) : (
             testRunId && (
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"

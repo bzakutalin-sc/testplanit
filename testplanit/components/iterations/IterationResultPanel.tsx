@@ -276,7 +276,7 @@ export function IterationResultPanel({
               <CheckCircle className="h-4 w-4" />
               {t("iterationPassAndNext")}
             </Button>
-            <DropdownMenu>
+            <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <Button
                   type="button"

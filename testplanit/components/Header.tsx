@@ -314,7 +314,7 @@ export const Header = () => {
                   {isMac ? "⌘K" : "Ctrl+K"}
                 </span>
               </Button>
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
