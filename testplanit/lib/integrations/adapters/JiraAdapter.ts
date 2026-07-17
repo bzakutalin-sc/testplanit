@@ -277,6 +277,13 @@ export class JiraAdapter extends BaseAdapter {
           throw new Error("No accessible Jira resources found");
         }
         this.cloudId = resources[0].id;
+        // Requests still route through the api.atlassian.com OAuth gateway
+        // (see buildUrl()); this is only captured so mapJiraIssue() can build
+        // human-facing /browse/{key} links against the real tenant site
+        // instead of Jira's "self" field, which Atlassian rewrites to the
+        // api.atlassian.com/ex/jira/{cloudId}/... gateway host for issues
+        // fetched through OAuth.
+        this.baseUrl = resources[0].url;
       }
     } else {
       throw new Error(
@@ -960,7 +967,13 @@ export class JiraAdapter extends BaseAdapter {
       customFields: this.extractCustomFields(fields),
       createdAt: new Date(fields.created),
       updatedAt: new Date(fields.updated),
-      url: `${jiraIssue.self.split("/rest/")[0]}/browse/${jiraIssue.key}`,
+      // Prefer the tenant's real site URL over Jira's "self" field: for
+      // OAuth/Cloud connections, self is rewritten to the
+      // api.atlassian.com/ex/jira/{cloudId}/... gateway host rather than the
+      // human-facing https://mysite.atlassian.net site (see performAuthentication).
+      url: this.baseUrl
+        ? `${this.baseUrl.replace(/\/$/, "")}/browse/${jiraIssue.key}`
+        : `${jiraIssue.self.split("/rest/")[0]}/browse/${jiraIssue.key}`,
     };
   }
 
