@@ -27,7 +27,7 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => {
+>(({ className, children, onPointerDownOutside, ...props }, ref) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const t = useTranslations("common.ui.dialog");
   const tGlobal = useTranslations();
@@ -37,11 +37,24 @@ const DialogContent = React.forwardRef<
     setIsFullScreen(!isFullScreen);
   };
 
+  const handlePointerDownOutside: NonNullable<
+    React.ComponentPropsWithoutRef<
+      typeof DialogPrimitive.Content
+    >["onPointerDownOutside"]
+  > = (e) => {
+    if ((e.target as HTMLElement | null)?.closest("[data-separator]")) {
+      e.preventDefault();
+      return;
+    }
+    onPointerDownOutside?.(e);
+  };
+
   return (
     <DialogPortal>
       <DialogOverlay />
       <DialogPrimitive.Content
         ref={ref}
+        onPointerDownOutside={handlePointerDownOutside}
         className={cn(
           "overflow-y-auto fixed z-50 grid sm:rounded-lg gap-4 border bg-background p-6 pt-8 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
           isFullScreen
