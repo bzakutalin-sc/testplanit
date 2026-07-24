@@ -189,6 +189,13 @@ export interface ProjectRepositoryProps {
   };
   /** Skip wrapping with DndProvider when already inside one (e.g., in modals opened from DnD-enabled pages) */
   skipDndProvider?: boolean;
+  /**
+   * Run mode only: reports the full ordered list of test run cases matching the
+   * currently active view/filter (not just the current page). See Cases.tsx.
+   */
+  onFilteredTestRunCaseIdsChange?: (
+    cases: Array<{ id: number; repositoryCaseId: number; order: number }> | null
+  ) => void;
 }
 
 interface TestRunCase {
@@ -381,6 +388,7 @@ const ProjectRepository: React.FC<ProjectRepositoryProps> = ({
   selectedTestCaseId,
   overridePagination,
   skipDndProvider = false,
+  onFilteredTestRunCaseIdsChange,
 }) => {
   const params = useParams();
   const projectIdParam = params.projectId as string;
@@ -1823,6 +1831,9 @@ const ProjectRepository: React.FC<ProjectRepositoryProps> = ({
                         descendantFolderIds={descendantFolderIds}
                         showDescendants={showDescendants}
                         folderPathMap={folderPathMap}
+                        onFilteredTestRunCaseIdsChange={
+                          onFilteredTestRunCaseIdsChange
+                        }
                       />
                     </>
                   </ResizablePanel>

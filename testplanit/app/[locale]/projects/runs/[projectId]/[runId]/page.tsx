@@ -285,6 +285,14 @@ export default function TestRunPage() {
   const [selectedConfigurations, setSelectedConfigurations] = useState<
     SelectedConfigurationInfo[]
   >([]);
+  // Ordered test run cases matching the currently active view/filter (e.g. Assigned
+  // To), reported by TestCasesSection. Null means no filter override is active —
+  // fall back to the run's full test case list for wizard next/prev navigation.
+  const [filteredTestRunCases, setFilteredTestRunCases] = useState<Array<{
+    id: number;
+    repositoryCaseId: number;
+    order: number;
+  }> | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCompleteDialogOpen, setIsCompleteDialogOpen] = useState(false);
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
@@ -1981,6 +1989,7 @@ export default function TestRunPage() {
                           onSelectedConfigurationsChange={
                             setSelectedConfigurations
                           }
+                          onFilteredTestCasesChange={setFilteredTestRunCases}
                         />
                       </>
                     )}
@@ -2213,11 +2222,15 @@ export default function TestRunPage() {
                   router.replace(`${pathname}?${params.toString()}`);
                 },
                 isTransitioning,
-                testRunCasesData: testRunData.testCases.map((tc) => ({
-                  id: tc.id,
-                  order: tc.order,
-                  repositoryCaseId: tc.repositoryCase.id,
-                })),
+                // When a view/filter (e.g. Assigned To) narrows the visible cases,
+                // scope next/prev navigation and the "X of Y" counter to that set.
+                testRunCasesData:
+                  filteredTestRunCases ??
+                  testRunData.testCases.map((tc) => ({
+                    id: tc.id,
+                    order: tc.order,
+                    repositoryCaseId: tc.repositoryCase.id,
+                  })),
                 isCompleted: testRunData.isCompleted,
               };
 

@@ -349,6 +349,14 @@ interface CasesProps {
   showDescendants?: boolean;
   /** Map of folderId to full folder path string, for display when showDescendants is active */
   folderPathMap?: Map<number, string> | null;
+  /**
+   * Run mode only: reports the full ordered list of test run cases matching the
+   * currently active view/filter (not just the current page), so callers can drive
+   * "Start Testing" and wizard next/prev navigation off the filtered set.
+   */
+  onFilteredTestRunCaseIdsChange?: (
+    cases: Array<{ id: number; repositoryCaseId: number; order: number }> | null
+  ) => void;
 }
 
 export default function Cases({
@@ -376,6 +384,7 @@ export default function Cases({
   descendantFolderIds,
   showDescendants = false,
   folderPathMap,
+  onFilteredTestRunCaseIdsChange,
 }: CasesProps) {
   const t = useTranslations();
 
@@ -1975,6 +1984,53 @@ export default function Cases({
         | undefined;
       refetch: any;
     };
+
+  // Unpaginated query mirroring testRunCasesData's where-clause, used to report
+  // the full filtered/ordered test run case set (not just the current page) up
+  // to callers so "Start Testing" and wizard next/prev navigation can respect
+  // the currently active view/filter (e.g. Assigned To).
+  const { data: allFilteredTestRunCasesData } = useFindManyTestRunCases(
+    {
+      where: {
+        testRunId:
+          effectiveRunIds.length === 1
+            ? effectiveRunIds[0]
+            : { in: effectiveRunIds },
+        isDeleted: false,
+        ...testRunCaseWhereClause,
+        repositoryCase: repositoryCaseWhereClause,
+      },
+      orderBy: testRunCasesOrderBy,
+      select: {
+        id: true,
+        repositoryCaseId: true,
+        order: true,
+      },
+    },
+    {
+      enabled: Boolean(
+        isRunMode &&
+          !!onFilteredTestRunCaseIdsChange &&
+          !!session?.user &&
+          isValidProjectId &&
+          effectiveRunIds.length > 0
+      ),
+      refetchOnWindowFocus: true,
+    }
+  ) as {
+    data:
+      | Array<{ id: number; repositoryCaseId: number; order: number }>
+      | undefined;
+  };
+
+  useEffect(() => {
+    if (!isRunMode || !onFilteredTestRunCaseIdsChange) return;
+    onFilteredTestRunCaseIdsChange(allFilteredTestRunCasesData ?? null);
+  }, [
+    isRunMode,
+    allFilteredTestRunCasesData,
+    onFilteredTestRunCaseIdsChange,
+  ]);
 
   // orderBy for repository cases (used in non-run mode)
   const orderBy: Prisma.RepositoryCasesOrderByWithRelationInput =

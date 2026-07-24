@@ -97,6 +97,15 @@ interface TestCasesSectionProps {
   onSelectedConfigurationsChange?: (
     configs: SelectedConfigurationInfo[]
   ) => void;
+  /**
+   * Reports the full ordered list of test run cases matching the currently
+   * active view/filter (e.g. Assigned To), so the wizard's next/prev
+   * navigation can be scoped to what's actually visible in the table.
+   * Null means "no filter override" (use the full run's test case list).
+   */
+  onFilteredTestCasesChange?: (
+    cases: Array<{ id: number; repositoryCaseId: number; order: number }> | null
+  ) => void;
 }
 
 export function TestCasesSection({
@@ -107,6 +116,7 @@ export function TestCasesSection({
   refetchTestRun: _refetchTestRun,
   onMultiConfigSelected,
   onSelectedConfigurationsChange,
+  onFilteredTestCasesChange,
 }: TestCasesSectionProps) {
   const t = useTranslations();
   const router = useRouter();
@@ -282,6 +292,25 @@ export function TestCasesSection({
   const isMultiConfigRun =
     !!testRunData?.configurationGroupId && (siblingTestRuns?.length || 0) > 1;
 
+  // Filtered (view/filter-scoped) test run cases, reported up by ProjectRepository/Cases.
+  // Only tracked for the simple single-run case view — multi-config selections span
+  // several test runs, whose case ids don't map onto this run's wizard navigation.
+  const [filteredTestRunCases, setFilteredTestRunCases] = useState<Array<{
+    id: number;
+    repositoryCaseId: number;
+    order: number;
+  }> | null>(null);
+  const shouldTrackFilteredCases =
+    !isEditMode && !(isMultiConfigRun && selectedConfigurations.length > 1);
+
+  useEffect(() => {
+    if (onFilteredTestCasesChange) {
+      onFilteredTestCasesChange(
+        shouldTrackFilteredCases ? filteredTestRunCases : null
+      );
+    }
+  }, [filteredTestRunCases, shouldTrackFilteredCases, onFilteredTestCasesChange]);
+
   // Notify parent when multiple configurations are selected
   useEffect(() => {
     if (onMultiConfigSelected) {
@@ -408,12 +437,27 @@ export function TestCasesSection({
 
   if (!testRunData) return null;
 
+  // When a filter/view narrows the visible cases (e.g. Assigned To: me), start
+  // from the first case in that filtered set instead of the run's full list.
+  const effectiveTestCases =
+    shouldTrackFilteredCases && filteredTestRunCases !== null
+      ? filteredTestRunCases
+      : null;
+
   const handleStartTesting = () => {
-    if (testRunData && testRunData.testCases.length > 0) {
-      const sortedTestCases = [...testRunData.testCases].sort(
+    const sourceCases =
+      effectiveTestCases ??
+      testRunData?.testCases.map((tc) => ({
+        repositoryCaseId: tc.repositoryCase.id,
+        order: tc.order,
+      })) ??
+      [];
+
+    if (sourceCases.length > 0) {
+      const sortedTestCases = [...sourceCases].sort(
         (a, b) => a.order - b.order
       );
-      const firstTestCaseId = sortedTestCases[0]?.repositoryCase.id;
+      const firstTestCaseId = sortedTestCases[0]?.repositoryCaseId;
       if (firstTestCaseId) {
         const newSearchParams = new URLSearchParams(searchParams.toString());
         newSearchParams.set("selectedCase", firstTestCaseId.toString());
@@ -500,7 +544,11 @@ export function TestCasesSection({
               variant="default"
               size="sm"
               onClick={handleStartTesting}
-              disabled={isLoadingPermissions}
+              disabled={
+                isLoadingPermissions ||
+                (effectiveTestCases !== null &&
+                  effectiveTestCases.length === 0)
+              }
             >
               <CirclePlay className="h-4 w-4" />
               {t("common.actions.startTesting")}
@@ -564,6 +612,9 @@ export function TestCasesSection({
             isCompleted={testRunData.isCompleted}
             projectId={params.projectId}
             ApplicationArea={ApplicationArea.TestRuns}
+            onFilteredTestRunCaseIdsChange={
+              shouldTrackFilteredCases ? setFilteredTestRunCases : undefined
+            }
           />
         )}
         {!isEditMode && testRunData.testCases.length === 0 && (
