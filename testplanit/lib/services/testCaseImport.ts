@@ -786,6 +786,10 @@ export async function persistGeneratedTestCases(
             });
           } catch (error) {
             const msg = error instanceof Error ? error.message : String(error);
+            console.error(
+              `[testCaseImport] Failed to import "${testCase.name}" (id=${testCase.id}):`,
+              error
+            );
             errors.push(`Failed to import "${testCase.name}": ${msg}`);
             results.push({
               id: testCase.id,

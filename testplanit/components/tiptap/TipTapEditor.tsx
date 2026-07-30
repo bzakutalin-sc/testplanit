@@ -334,7 +334,17 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({
         if (onUpdate && editor) {
           try {
             const json = editor.getJSON();
-            onUpdate(json);
+            // ProseMirror interns marks: multiple text runs with identical
+            // formatting share the SAME attrs object instance, and
+            // Node.prototype.toJSON() copies `attrs` by reference (not a
+            // clone). That shared/repeated object reference is what was
+            // surfacing as a "temporary client reference" error when this
+            // content crossed the Next.js Server Action boundary on save
+            // (root-caused via a raw stack trace pointing at
+            // `steps[].step...marks[].attrs`). A JSON round-trip clone
+            // gives every value its own fresh, unshared identity.
+            const clonedJson = JSON.parse(JSON.stringify(json));
+            onUpdate(clonedJson);
           } catch (error) {
             console.warn(
               "Error in editor.getJSON, using emptyEditorContent as fallback",

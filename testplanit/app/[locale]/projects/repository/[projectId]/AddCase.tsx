@@ -885,17 +885,6 @@ export function AddCase({ folderId, open, onClose }: AddCaseProps) {
           ...data,
           workflowId: Number(data.workflowId),
           templateId: Number(data.templateId),
-          ...Object.entries(data).reduce(
-            (acc, [key, value]) => {
-              if (typeof value === "string" && !isNaN(Number(value))) {
-                acc[key] = Number(value);
-              } else {
-                acc[key] = value;
-              }
-              return acc;
-            },
-            {} as Record<string, any>
-          ),
         };
 
         const dynamicFields = Object.entries(convertedData)
@@ -1079,7 +1068,7 @@ export function AddCase({ folderId, open, onClose }: AddCaseProps) {
           (tt) => tt.id === convertedData.templateId
         );
 
-        const result = await importGeneratedTestCases({
+        const importPayload = {
           projectId: Number(projectId),
           projectName: folder?.project?.name || "",
           repositoryId: folder?.repositoryId || 0,
@@ -1093,7 +1082,7 @@ export function AddCase({ folderId, open, onClose }: AddCaseProps) {
             "",
           maxOrder: maxOrder?.order ?? 0,
           autoGenerateTags: false,
-          source: "MANUAL",
+          source: "MANUAL" as const,
           testCases: [
             {
               id: crypto.randomUUID(),
@@ -1120,7 +1109,9 @@ export function AddCase({ folderId, open, onClose }: AddCaseProps) {
             },
           ],
           fieldMappings: [],
-        });
+        };
+
+        const result = await importGeneratedTestCases(importPayload);
 
         if (result.status === "error" || result.importedIds.length === 0) {
           throw new Error(
