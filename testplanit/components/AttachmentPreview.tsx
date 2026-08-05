@@ -91,7 +91,6 @@ export const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
   };
 
   if (fileType.startsWith("image/")) {
-    const { height, width } = getSizeClasses(100);
     // SVGs bypass next/image: the built-in optimizer refuses SVG unless
     // `images.dangerouslyAllowSVG` is enabled, and we don't want to opt into
     // that (SVG can carry inline <script>). Browsers don't execute scripts in
@@ -99,6 +98,33 @@ export const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
     const isSvg =
       fileType === "image/svg+xml" ||
       attachment.name.toLowerCase().endsWith(".svg");
+
+    if (size === "large") {
+      // Scales to fill the space the caller gives it (e.g. the attachment
+      // viewer modal) instead of the fixed thumbnail box below.
+      return (
+        <div className="relative flex w-full min-h-[200px] h-[55vh] max-h-[550px] items-center justify-center">
+          {isSvg ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={fileURL}
+              alt={attachment.name}
+              className="h-auto max-h-full w-auto max-w-full object-contain"
+            />
+          ) : (
+            <Image
+              src={fileURL}
+              alt={attachment.name}
+              fill
+              sizes="100vw"
+              className="object-contain"
+            />
+          )}
+        </div>
+      );
+    }
+
+    const { height, width } = getSizeClasses(100);
     return (
       <div
         className="flex justify-center items-center max-h-[350px]"
