@@ -528,6 +528,7 @@ const TestRunStatusCell = React.memo(function TestRunStatusCell({
   steps,
   isSoftDeletedInRun,
   onOpenAddResultModal,
+  onOpenAssignModal,
   totalIterations,
 }: {
   status: ExtendedCases["testRunStatus"];
@@ -555,6 +556,16 @@ const TestRunStatusCell = React.memo(function TestRunStatusCell({
     selectedCases?: ExtendedCases[];
     steps?: any[];
     configuration?: { id: number; name: string } | null;
+  }) => void;
+  onOpenAssignModal?: (modalData: {
+    testRunId: number;
+    testRunCaseId?: number;
+    caseId: number;
+    caseName: string;
+    projectId: number;
+    currentAssigneeId?: string | null;
+    isBulkAssign: boolean;
+    selectedCases?: ExtendedCases[];
   }) => void;
   totalIterations?: number;
 }) {
@@ -653,25 +664,35 @@ const TestRunStatusCell = React.memo(function TestRunStatusCell({
     );
   };
 
-  const handleBulkAssign = () => {
+  // Prefer the parent-owned modal: state kept inside this cell is lost whenever
+  // the column defs are rebuilt (TanStack renders `columnDef.cell` as the
+  // component type), which silently closes the dialog.
+  const openAssignModal = (bulk: boolean) => {
     if (isCompleted) return;
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
-    setIsBulkAssign(true);
-    setShowAssignModal(true);
+    if (onOpenAssignModal) {
+      onOpenAssignModal({
+        testRunId,
+        testRunCaseId,
+        caseId,
+        caseName,
+        projectId,
+        currentAssigneeId: currentAssignee?.id,
+        isBulkAssign: bulk,
+        selectedCases: bulk ? getSelectedCases() : undefined,
+      });
+    } else {
+      setIsBulkAssign(bulk);
+      setShowAssignModal(true);
+    }
     onModalOpen?.(true);
   };
 
-  const handleSingleAssign = () => {
-    if (isCompleted) return;
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
-    setIsBulkAssign(false);
-    setShowAssignModal(true);
-    onModalOpen?.(true);
-  };
+  const handleBulkAssign = () => openAssignModal(true);
+
+  const handleSingleAssign = () => openAssignModal(false);
 
   const handleAssignModalClose = () => {
     setShowAssignModal(false);
@@ -886,7 +907,7 @@ const TestRunStatusCell = React.memo(function TestRunStatusCell({
         </DropdownMenu>
       </div>
 
-      {showAssignModal && (
+      {!onOpenAssignModal && showAssignModal && (
         <AssignTestCaseModal
           isOpen={showAssignModal}
           onClose={handleAssignModalClose}
@@ -1014,6 +1035,7 @@ const ActionsCell = React.memo(function ActionsCell({
   canAddEdit,
   onQuickScript,
   onCopyMove,
+  onDeleteCase,
   excludeNotStartedFromRuns,
 }: {
   row: any;
@@ -1026,6 +1048,7 @@ const ActionsCell = React.memo(function ActionsCell({
   canAddEdit?: boolean;
   onQuickScript?: (caseId: number) => void;
   onCopyMove?: (caseId: number) => void;
+  onDeleteCase?: (testcase: ExtendedCases) => void;
   excludeNotStartedFromRuns?: boolean;
 }) {
   const isDraftCase =
@@ -1112,7 +1135,15 @@ const ActionsCell = React.memo(function ActionsCell({
             <DropdownMenuItem
               onClick={(e) => {
                 e.preventDefault();
-                setShowDeleteModal(true);
+                // Prefer the parent-owned dialog: state kept inside this cell is
+                // lost whenever the column defs are rebuilt (TanStack renders
+                // `columnDef.cell` as the component type), which silently closes
+                // the confirmation dialog.
+                if (onDeleteCase) {
+                  onDeleteCase(row.original);
+                } else {
+                  setShowDeleteModal(true);
+                }
               }}
               className="text-destructive focus:text-destructive"
             >
@@ -1123,7 +1154,7 @@ const ActionsCell = React.memo(function ActionsCell({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {canDelete && showDeleteModal && (
+      {canDelete && !onDeleteCase && showDeleteModal && (
         <DeleteCaseModal
           key={`delete-${row.original.id}`}
           testcase={row.original}
@@ -1463,7 +1494,18 @@ export const getColumns = (
   showDescendants?: boolean,
   folderPathMap?: Map<number, string> | null,
   renderPendingBadge?: (caseId: number) => React.ReactNode,
-  excludeNotStartedFromRuns?: boolean
+  excludeNotStartedFromRuns?: boolean,
+  onDeleteCase?: (testcase: ExtendedCases) => void,
+  onOpenAssignModal?: (modalData: {
+    testRunId: number;
+    testRunCaseId?: number;
+    caseId: number;
+    caseName: string;
+    projectId: number;
+    currentAssigneeId?: string | null;
+    isBulkAssign: boolean;
+    selectedCases?: ExtendedCases[];
+  }) => void
 ): ColumnDef<ExtendedCases>[] => {
   const isStepsFieldPresent = uniqueCaseFieldList.some(
     (field) => field.displayName === "Steps"
@@ -2356,6 +2398,7 @@ export const getColumns = (
                     })
                 : undefined
             }
+            onOpenAssignModal={onOpenAssignModal}
             totalIterations={row.original.totalIterations}
           />
         );
@@ -2393,6 +2436,7 @@ export const getColumns = (
             canAddEdit={canAddEdit}
             onQuickScript={onQuickScript}
             onCopyMove={onCopyMove}
+            onDeleteCase={onDeleteCase}
             excludeNotStartedFromRuns={excludeNotStartedFromRuns}
           />
         ),
