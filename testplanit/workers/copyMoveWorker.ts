@@ -47,6 +47,12 @@ export interface CopyMoveJobResult {
   skippedCount: number;
   droppedLinkCount: number;
   errors: Array<{ caseId: number; caseName: string; error: string }>;
+  /**
+   * IDs of the cases created by this job, in source order. The wizard ignores
+   * these, but the single-case Duplicate action uses them to link the user
+   * straight to the new copy.
+   */
+  createdCaseIds: number[];
 }
 
 export interface FolderTreeNode {
@@ -481,6 +487,7 @@ const processor = async (
       skippedCount: 0,
       droppedLinkCount: 0,
       errors: [],
+      createdCaseIds: [],
     };
 
     // 9. Main processing loop — one transaction per case
@@ -936,6 +943,10 @@ const processor = async (
     // 12. Cross-project case links (RepositoryCaseLink) are dropped silently
     // droppedLinkCount could be calculated here if needed; currently reported as 0
     result.droppedLinkCount = 0;
+
+    // Report the new case IDs (set after the rollback-guarded loop, so a
+    // failed job never hands back IDs whose rows were just deleted).
+    result.createdCaseIds = createdTargetIds.map(({ newId }) => newId);
 
     // 12b. Audit logging — log bulk operation for created cases
     for (const { newId } of createdTargetIds) {

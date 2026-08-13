@@ -106,6 +106,7 @@
       "createTag": "Tạo thẻ \"{name}\"",
       "noTagsFound": "Không tìm thấy thẻ nào",
       "duplicate": "Nhân bản",
+      "clone": "Nhân bản",
       "exportPdf": "Xuất PDF",
       "exportingPdf": "Đang xuất khẩu...",
       "change": "Thay đổi",
@@ -2631,6 +2632,12 @@
       "createTestRun": "Tạo bản chạy thử nghiệm",
       "addToRunDraftBlocked": "Không thể thêm các trường hợp nháp vào các lần chạy khi tùy chọn \"Loại trừ các trường hợp nháp khỏi các lần chạy thử nghiệm\" được bật cho dự án này.",
       "copyMoveToProject": "Sao chép / Di chuyển",
+      "cloneCase": {
+        "inProgress": "Đang nhân bản trường hợp kiểm thử...",
+        "success": "Đã nhân bản trường hợp kiểm thử",
+        "error": "Không thể nhân bản trường hợp kiểm thử",
+        "openClone": "Mở bản nhân bản"
+      },
       "export": "Xuất khẩu",
       "quickScript": "QuickScript",
       "parameterizedStatusReadOnly": "Trạng thái được tính toán từ kết quả lặp — nhấp để mở",

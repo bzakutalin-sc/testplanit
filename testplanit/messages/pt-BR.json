@@ -106,6 +106,7 @@
       "createTag": "Criar etiqueta \"{name}\"",
       "noTagsFound": "Nenhuma etiqueta encontrada",
       "duplicate": "Duplicado",
+      "clone": "Clonar",
       "exportPdf": "Exportar PDF",
       "exportingPdf": "Exportador...",
       "change": "Mudar",
@@ -2631,6 +2632,12 @@
       "createTestRun": "Criar execução de teste",
       "addToRunDraftBlocked": "Não é possível adicionar casos em rascunho às execuções enquanto a opção \"Excluir casos em rascunho das execuções de teste\" estiver ativada para este projeto.",
       "copyMoveToProject": "Copiar/Mover",
+      "cloneCase": {
+        "inProgress": "Clonando caso de teste...",
+        "success": "Caso de teste clonado",
+        "error": "Falha ao clonar o caso de teste",
+        "openClone": "Abrir clone"
+      },
       "export": "Exportar",
       "quickScript": "QuickScript",
       "parameterizedStatusReadOnly": "O status é calculado a partir dos resultados da iteração — clique para abrir.",

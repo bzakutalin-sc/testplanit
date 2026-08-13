@@ -106,6 +106,7 @@
       "createTag": "\"{name} \" etiketini oluştur",
       "noTagsFound": "Etiket bulunamadı.",
       "duplicate": "Kopyalamak",
+      "clone": "Klonla",
       "exportPdf": "PDF olarak dışa aktar",
       "exportingPdf": "İhracat...",
       "change": "Değiştirmek",
@@ -2631,6 +2632,12 @@
       "createTestRun": "Test Çalıştırması Oluştur",
       "addToRunDraftBlocked": "Bu proje için \"Taslak vakaları test çalıştırmalarından hariç tut\" seçeneği açıkken, taslak vakalar çalıştırmalara eklenemez.",
       "copyMoveToProject": "Kopyala / Taşı",
+      "cloneCase": {
+        "inProgress": "Test senaryosu klonlanıyor...",
+        "success": "Test senaryosu klonlandı",
+        "error": "Test senaryosu klonlanamadı",
+        "openClone": "Klonu aç"
+      },
       "export": "İhracat",
       "quickScript": "QuickScript",
       "parameterizedStatusReadOnly": "Durum, yineleme sonuçlarından hesaplanır — açmak için tıklayın",

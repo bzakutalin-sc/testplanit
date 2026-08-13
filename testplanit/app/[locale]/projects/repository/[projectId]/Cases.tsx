@@ -75,6 +75,7 @@ import { AddResultModal } from "./AddResultModal";
 import { AssignTestCaseModal } from "./AssignTestCase";
 import { BulkEditModal } from "./BulkEditModal";
 import { CopyMoveDialog } from "@/components/copy-move/CopyMoveDialog";
+import { useCloneCases } from "@/components/copy-move/useCloneCases";
 import { ExtendedCases, getColumns } from "./columns";
 import { DeleteCaseModal } from "./DeleteCase";
 import { ExportModal, ExportOptions } from "./ExportModal";
@@ -2026,10 +2027,10 @@ export default function Cases({
     {
       enabled: Boolean(
         isRunMode &&
-          !!onFilteredTestRunCaseIdsChange &&
-          !!session?.user &&
-          isValidProjectId &&
-          effectiveRunIds.length > 0
+        !!onFilteredTestRunCaseIdsChange &&
+        !!session?.user &&
+        isValidProjectId &&
+        effectiveRunIds.length > 0
       ),
       refetchOnWindowFocus: true,
     }
@@ -2042,11 +2043,7 @@ export default function Cases({
   useEffect(() => {
     if (!isRunMode || !onFilteredTestRunCaseIdsChange) return;
     onFilteredTestRunCaseIdsChange(allFilteredTestRunCasesData ?? null);
-  }, [
-    isRunMode,
-    allFilteredTestRunCasesData,
-    onFilteredTestRunCaseIdsChange,
-  ]);
+  }, [isRunMode, allFilteredTestRunCasesData, onFilteredTestRunCaseIdsChange]);
 
   // orderBy for repository cases (used in non-run mode)
   const orderBy: Prisma.RepositoryCasesOrderByWithRelationInput =
@@ -3152,6 +3149,44 @@ export default function Cases({
     setIsCopyMoveOpen(true);
   }, []);
 
+  // Clone a single case in place — same project, same folder, name suffixed
+  // with "(copy)" by the copy-move worker.
+  const { clone, isCloning } = useCloneCases();
+  const handleCloneCase = useCallback(
+    async (testcase: ExtendedCases) => {
+      const toastId = toast.loading(t("repository.cases.cloneCase.inProgress"));
+      try {
+        const result = await clone({
+          caseIds: [testcase.id],
+          projectId: testcase.projectId,
+          folderId: testcase.folderId,
+          repositoryId: testcase.repositoryId,
+        });
+        const newCaseId = result.createdCaseIds[0];
+        toast.success(t("repository.cases.cloneCase.success"), {
+          id: toastId,
+          action: newCaseId
+            ? {
+                label: t("repository.cases.cloneCase.openClone"),
+                onClick: () =>
+                  router.push(
+                    `/projects/repository/${testcase.projectId}/${newCaseId}`
+                  ),
+              }
+            : undefined,
+        });
+        window.dispatchEvent(new CustomEvent("repositoryCasesChanged"));
+      } catch (err) {
+        console.error("Error cloning case:", err);
+        toast.error(t("repository.cases.cloneCase.error"), {
+          id: toastId,
+          description: err instanceof Error ? err.message : undefined,
+        });
+      }
+    },
+    [clone, router, t]
+  );
+
   // Delete confirmation is owned by this component, not by the row action cell:
   // rebuilding `columns` (or any table remount) would otherwise unmount the cell
   // and silently close the dialog.
@@ -3263,7 +3298,11 @@ export default function Cases({
       // Callback to open AssignTestCaseModal from TestRunStatusCell
       (modalData) => {
         setAssignModalState({ isOpen: true, ...modalData });
-      }
+      },
+      // Clone per-row action — repository view only (a run's case list shows
+      // cases through their run rows, where cloning has no meaning)
+      !isRunMode ? handleCloneCase : undefined,
+      isCloning
     );
   }, [
     userPreferencesForColumns,
@@ -3297,6 +3336,8 @@ export default function Cases({
     renderPendingBadge,
     excludeNotStartedFromRuns,
     handleDeleteCase,
+    handleCloneCase,
+    isCloning,
   ]);
 
   // Create lightweight column metadata for ColumnSelection component

@@ -1876,4 +1876,42 @@ describe("CopyMoveWorker", () => {
       ).rejects.toThrow(/simulated unique-constraint violation/);
     });
   });
+
+  // ─── createdCaseIds in the job result ─────────────────────────────────────
+
+  describe("createdCaseIds", () => {
+    it("reports the new case IDs in source order", async () => {
+      mockPrisma.repositoryCases.findMany.mockResolvedValue([
+        { ...mockSourceCase, id: 1 },
+        { ...mockSourceCase, id: 2, name: "Test Case 2" },
+      ]);
+      mockTx.repositoryCases.create
+        .mockResolvedValueOnce({ id: 1001 })
+        .mockResolvedValueOnce({ id: 1002 });
+
+      const { processor } = await loadWorker();
+      const result = await processor(
+        makeMockJob({
+          data: { ...baseCopyJobData, caseIds: [1, 2] },
+        }) as Job
+      );
+
+      expect(result.createdCaseIds).toEqual([1001, 1002]);
+    });
+
+    it("is empty when every case is skipped on collision", async () => {
+      // A live collision plus conflictResolution "skip" means nothing is created.
+      mockPrisma.repositoryCases.findFirst.mockResolvedValue({ id: 555 });
+
+      const { processor } = await loadWorker();
+      const result = await processor(
+        makeMockJob({
+          data: { ...baseCopyJobData, conflictResolution: "skip" },
+        }) as Job
+      );
+
+      expect(result.createdCaseIds).toEqual([]);
+      expect(result.copiedCount).toBe(0);
+    });
+  });
 });

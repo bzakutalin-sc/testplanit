@@ -106,6 +106,7 @@
       "createTag": "创建标签“{name}”",
       "noTagsFound": "未找到标签",
       "duplicate": "复制",
+      "clone": "克隆",
       "exportPdf": "导出PDF",
       "exportingPdf": "出口...",
       "change": "改变",
@@ -2631,6 +2632,12 @@
       "createTestRun": "创建测试运行",
       "addToRunDraftBlocked": "如果此项目的“从测试运行中排除草稿案例”选项已启用，则无法将草稿案例添加到运行中。",
       "copyMoveToProject": "复制/移动",
+      "cloneCase": {
+        "inProgress": "正在克隆测试用例...",
+        "success": "测试用例已克隆",
+        "error": "克隆测试用例失败",
+        "openClone": "打开克隆"
+      },
       "export": "出口",
       "quickScript": "QuickScript",
       "parameterizedStatusReadOnly": "状态由迭代结果计算得出——点击打开",

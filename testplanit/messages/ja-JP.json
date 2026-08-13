@@ -106,6 +106,7 @@
       "createTag": "タグ「{name}」を作成",
       "noTagsFound": "タグが見つかりません",
       "duplicate": "重複",
+      "clone": "クローン",
       "exportPdf": "PDFをエクスポート",
       "exportingPdf": "エクスポート中...",
       "change": "変化",
@@ -2631,6 +2632,12 @@
       "createTestRun": "テスト実行の作成",
       "addToRunDraftBlocked": "このプロジェクトで「テスト実行から下書きケースを除外する」が有効になっている間は、下書きケースを実行に追加することはできません。",
       "copyMoveToProject": "コピー／移動",
+      "cloneCase": {
+        "inProgress": "テストケースをクローンしています...",
+        "success": "テストケースをクローンしました",
+        "error": "テストケースをクローンできませんでした",
+        "openClone": "クローンを開く"
+      },
       "export": "輸出",
       "quickScript": "クイックスクリプト",
       "parameterizedStatusReadOnly": "ステータスは反復結果から計算されます — クリックして開きます",

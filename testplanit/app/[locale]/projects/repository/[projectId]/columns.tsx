@@ -75,6 +75,7 @@ import {
   ArrowRightLeft,
   Bot,
   Check,
+  CopyPlus,
   ExternalLink,
   Flame,
   Folder,
@@ -1035,6 +1036,8 @@ const ActionsCell = React.memo(function ActionsCell({
   canAddEdit,
   onQuickScript,
   onCopyMove,
+  onClone,
+  isCloning,
   onDeleteCase,
   excludeNotStartedFromRuns,
 }: {
@@ -1048,6 +1051,8 @@ const ActionsCell = React.memo(function ActionsCell({
   canAddEdit?: boolean;
   onQuickScript?: (caseId: number) => void;
   onCopyMove?: (caseId: number) => void;
+  onClone?: (testcase: ExtendedCases) => void;
+  isCloning?: boolean;
   onDeleteCase?: (testcase: ExtendedCases) => void;
   excludeNotStartedFromRuns?: boolean;
 }) {
@@ -1122,6 +1127,23 @@ const ActionsCell = React.memo(function ActionsCell({
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
             ))}
+          {/* Cloning an automated case would create a manual twin the importer
+              can never reconcile with its source suite, so the action is
+              offered for authored cases only. */}
+          {!isRunMode &&
+            !isSelectionMode &&
+            canAddEdit &&
+            onClone &&
+            !isAutomatedCaseSource(row.original.source) && (
+              <DropdownMenuItem
+                disabled={isCloning}
+                onClick={() => onClone(row.original)}
+                data-testid={`clone-case-${row.original.id}`}
+              >
+                <CopyPlus className="mr-2 h-4 w-4" />
+                <span>{t("common.actions.clone")}</span>
+              </DropdownMenuItem>
+            )}
           {!isRunMode && !isSelectionMode && onCopyMove && (
             <DropdownMenuItem
               onClick={() => onCopyMove(row.original.id)}
@@ -1505,7 +1527,9 @@ export const getColumns = (
     currentAssigneeId?: string | null;
     isBulkAssign: boolean;
     selectedCases?: ExtendedCases[];
-  }) => void
+  }) => void,
+  onClone?: (testcase: ExtendedCases) => void,
+  isCloning?: boolean
 ): ColumnDef<ExtendedCases>[] => {
   const isStepsFieldPresent = uniqueCaseFieldList.some(
     (field) => field.displayName === "Steps"
@@ -2409,7 +2433,8 @@ export const getColumns = (
       (canDelete ||
         canAddEditRun ||
         (quickScriptEnabled && canAddEdit) ||
-        !!onCopyMove) &&
+        !!onCopyMove ||
+        (canAddEdit && !!onClone)) &&
       !isSelectionMode
     ) {
       orderedColumns.push({
@@ -2436,6 +2461,8 @@ export const getColumns = (
             canAddEdit={canAddEdit}
             onQuickScript={onQuickScript}
             onCopyMove={onCopyMove}
+            onClone={onClone}
+            isCloning={isCloning}
             onDeleteCase={onDeleteCase}
             excludeNotStartedFromRuns={excludeNotStartedFromRuns}
           />

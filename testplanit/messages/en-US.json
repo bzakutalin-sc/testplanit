@@ -106,6 +106,7 @@
       "createTag": "Create Tag \"{name}\"",
       "noTagsFound": "No Tags Found",
       "duplicate": "Duplicate",
+      "clone": "Clone",
       "exportPdf": "Export PDF",
       "exportingPdf": "Exporting...",
       "change": "Change",
@@ -2631,6 +2632,12 @@
       "createTestRun": "Create Test Run",
       "addToRunDraftBlocked": "Draft cases cannot be added to runs while \"Exclude draft cases from test runs\" is on for this project.",
       "copyMoveToProject": "Copy / Move",
+      "cloneCase": {
+        "inProgress": "Cloning test case...",
+        "success": "Test case cloned",
+        "error": "Failed to clone test case",
+        "openClone": "Open clone"
+      },
       "export": "Export",
       "quickScript": "QuickScript",
       "parameterizedStatusReadOnly": "Status is computed from iteration results — click to open",

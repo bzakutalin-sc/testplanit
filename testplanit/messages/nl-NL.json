@@ -106,6 +106,7 @@
       "createTag": "Tag \"{name}\" maken",
       "noTagsFound": "Geen tags gevonden",
       "duplicate": "Duplicaat",
+      "clone": "Klonen",
       "exportPdf": "PDF exporteren",
       "exportingPdf": "Exporteren...",
       "change": "Wijziging",
@@ -2631,6 +2632,12 @@
       "createTestRun": "Testrun maken",
       "addToRunDraftBlocked": "Conceptcases kunnen niet aan testruns worden toegevoegd als de optie \"Conceptcases uitsluiten van testruns\" voor dit project is ingeschakeld.",
       "copyMoveToProject": "Kopiëren / Verplaatsen",
+      "cloneCase": {
+        "inProgress": "Testcase klonen...",
+        "success": "Testcase gekloond",
+        "error": "Klonen van testcase mislukt",
+        "openClone": "Kloon openen"
+      },
       "export": "Exporteren",
       "quickScript": "QuickScript",
       "parameterizedStatusReadOnly": "De status wordt berekend op basis van de iteratieresultaten — klik om te openen",

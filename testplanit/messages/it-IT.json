@@ -106,6 +106,7 @@
       "createTag": "Crea tag \"{name}\"",
       "noTagsFound": "Nessun tag trovato",
       "duplicate": "Duplicato",
+      "clone": "Clona",
       "exportPdf": "Esporta in PDF",
       "exportingPdf": "Esportazione...",
       "change": "Modifica",
@@ -2631,6 +2632,12 @@
       "createTestRun": "Crea esecuzione di prova",
       "addToRunDraftBlocked": "Non è possibile aggiungere casi in bozza alle esecuzioni se l'opzione \"Escludi casi in bozza dalle esecuzioni di test\" è attiva per questo progetto.",
       "copyMoveToProject": "Copia/Sposta",
+      "cloneCase": {
+        "inProgress": "Clonazione del caso di test in corso...",
+        "success": "Caso di test clonato",
+        "error": "Impossibile clonare il caso di test",
+        "openClone": "Apri clone"
+      },
       "export": "Esportare",
       "quickScript": "QuickScript",
       "parameterizedStatusReadOnly": "Lo stato viene calcolato in base ai risultati dell'iterazione: fai clic per aprire.",

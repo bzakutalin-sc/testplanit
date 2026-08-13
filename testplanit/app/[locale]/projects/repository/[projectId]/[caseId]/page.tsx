@@ -3,6 +3,7 @@
 
 import { AttachmentChanges } from "@/components/AttachmentsDisplay";
 import BreadcrumbComponent from "@/components/BreadcrumbComponent";
+import { useCloneCases } from "@/components/copy-move/useCloneCases";
 import { formatSeconds } from "@/components/DurationDisplay";
 import {
   FolderSelect,
@@ -65,6 +66,7 @@ import {
   Asterisk,
   ChevronLeft,
   CircleSlash2,
+  CopyPlus,
   LockIcon,
   Save,
   ScrollText,
@@ -83,6 +85,7 @@ import React, {
 } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { PanelImperativeHandle } from "react-resizable-panels";
+import { toast } from "sonner";
 import { z } from "zod/v4";
 import { emptyEditorContent, MAX_DURATION } from "~/app/constants";
 import { isTiptapEmpty } from "~/lib/tiptap/isTiptapEmpty";
@@ -1024,6 +1027,33 @@ export default function TestCaseDetails() {
   const { mutateAsync: createSteps } = useCreateSteps();
   const { mutateAsync: updateManySteps } = useUpdateManySteps();
   const { mutateAsync: createCaseFieldValues } = useCreateCaseFieldValues();
+
+  // Clone this case in place, then open the clone so the user can edit it
+  // straight away — the whole point of cloning is to tweak the result.
+  const { clone, isCloning } = useCloneCases();
+  const handleClone = useCallback(async () => {
+    if (!testcase) return;
+    const toastId = toast.loading(t("repository.cases.cloneCase.inProgress"));
+    try {
+      const result = await clone({
+        caseIds: [testcase.id],
+        projectId: testcase.projectId,
+        folderId: testcase.folderId,
+        repositoryId: testcase.repositoryId,
+      });
+      toast.success(t("repository.cases.cloneCase.success"), { id: toastId });
+      const newCaseId = result.createdCaseIds[0];
+      if (newCaseId) {
+        router.push(`/projects/repository/${testcase.projectId}/${newCaseId}`);
+      }
+    } catch (err) {
+      console.error("Error cloning case:", err);
+      toast.error(t("repository.cases.cloneCase.error"), {
+        id: toastId,
+        description: err instanceof Error ? err.message : undefined,
+      });
+    }
+  }, [clone, router, t, testcase]);
 
   // Restore handleEditModeToggle
   const handleEditModeToggle = () => {
@@ -2093,6 +2123,25 @@ export default function TestCaseDetails() {
                           </span>
                         </Button>
                       )}
+                      {/* Automated cases are excluded: a manual twin of an
+                          imported case can never be reconciled with the suite
+                          it came from. */}
+                      {canAddEdit &&
+                        !isAutomatedCaseSource(testcase.source) && (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleClone}
+                            disabled={isCloning}
+                            data-testid="clone-test-case-button"
+                            className="group px-4 hover:px-4 transition-all duration-200 gap-0 hover:gap-2"
+                          >
+                            <CopyPlus className="h-4 w-4 shrink-0" />
+                            <span className="max-w-0 overflow-hidden whitespace-nowrap transition-all duration-200 group-hover:max-w-40">
+                              {t("common.actions.clone")}
+                            </span>
+                          </Button>
+                        )}
                       {canAddEdit && (
                         <Button
                           type="button"

@@ -106,6 +106,7 @@
       "createTag": "إنشاء وسم \"{name}\"",
       "noTagsFound": "لم يتم العثور على وسوم",
       "duplicate": "تكرار",
+      "clone": "استنساخ",
       "exportPdf": "تصدير PDF",
       "exportingPdf": "جارٍ التصدير...",
       "change": "تغيير",
@@ -2631,6 +2632,12 @@
       "createTestRun": "إنشاء تشغيل اختبار",
       "addToRunDraftBlocked": "لا يمكن إضافة الحالات المسودة إلى التشغيلات بينما \"استبعاد الحالات المسودة من تشغيلات الاختبار\" مفعّل لهذا المشروع.",
       "copyMoveToProject": "نسخ / نقل",
+      "cloneCase": {
+        "inProgress": "جارٍ استنساخ حالة الاختبار...",
+        "success": "تم استنساخ حالة الاختبار",
+        "error": "فشل استنساخ حالة الاختبار",
+        "openClone": "فتح النسخة المستنسخة"
+      },
       "export": "تصدير",
       "quickScript": "QuickScript",
       "parameterizedStatusReadOnly": "تُحسب الحالة من نتائج التكرار — انقر للفتح",

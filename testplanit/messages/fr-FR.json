@@ -106,6 +106,7 @@
       "createTag": "Créer une balise \"{name}\"",
       "noTagsFound": "Aucune étiquette trouvée",
       "duplicate": "Double",
+      "clone": "Cloner",
       "exportPdf": "Exporter le PDF",
       "exportingPdf": "Exportation...",
       "change": "Changement",
@@ -2631,6 +2632,12 @@
       "createTestRun": "Créer un test d'exécution",
       "addToRunDraftBlocked": "Il est impossible d'ajouter des cas provisoires aux exécutions tant que l'option « Exclure les cas provisoires des exécutions de test » est activée pour ce projet.",
       "copyMoveToProject": "Copier / Déplacer",
+      "cloneCase": {
+        "inProgress": "Clonage du cas de test...",
+        "success": "Cas de test cloné",
+        "error": "Échec du clonage du cas de test",
+        "openClone": "Ouvrir le clone"
+      },
       "export": "Exporter",
       "quickScript": "QuickScript",
       "parameterizedStatusReadOnly": "Le statut est calculé à partir des résultats d'itération — cliquez pour ouvrir",

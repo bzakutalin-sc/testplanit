@@ -106,6 +106,7 @@
       "createTag": "Utwórz tag „{name}”",
       "noTagsFound": "Nie znaleziono tagów",
       "duplicate": "Duplikat",
+      "clone": "Klonuj",
       "exportPdf": "Eksportuj PDF",
       "exportingPdf": "Eksportowanie...",
       "change": "Zmiana",
@@ -2631,6 +2632,12 @@
       "createTestRun": "Utwórz przebieg testowy",
       "addToRunDraftBlocked": "Nie można dodawać roboczych wersji przypadków do przebiegów, jeśli dla tego projektu włączona jest opcja „Wyklucz robocze wersje przypadków z przebiegów testowych”.",
       "copyMoveToProject": "Kopiuj / Przenieś",
+      "cloneCase": {
+        "inProgress": "Klonowanie przypadku testowego...",
+        "success": "Przypadek testowy sklonowany",
+        "error": "Nie udało się sklonować przypadku testowego",
+        "openClone": "Otwórz klon"
+      },
       "export": "Eksport",
       "quickScript": "QuickScript",
       "parameterizedStatusReadOnly": "Status obliczany jest na podstawie wyników iteracji — kliknij, aby otworzyć",

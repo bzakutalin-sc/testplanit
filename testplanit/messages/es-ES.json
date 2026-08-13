@@ -106,6 +106,7 @@
       "createTag": "Crear etiqueta \"{name}\"",
       "noTagsFound": "No se encontraron etiquetas",
       "duplicate": "Duplicate",
+      "clone": "Clonar",
       "exportPdf": "Exportar PDF",
       "exportingPdf": "Exportador...",
       "change": "Cambiar",
@@ -2631,6 +2632,12 @@
       "createTestRun": "Crear prueba de ejecución",
       "addToRunDraftBlocked": "No se pueden agregar casos preliminares a las ejecuciones mientras la opción \"Excluir casos preliminares de las ejecuciones de prueba\" esté activada para este proyecto.",
       "copyMoveToProject": "Copiar / Mover",
+      "cloneCase": {
+        "inProgress": "Clonando caso de prueba...",
+        "success": "Caso de prueba clonado",
+        "error": "No se pudo clonar el caso de prueba",
+        "openClone": "Abrir clon"
+      },
       "export": "Exportar",
       "quickScript": "Script rápido",
       "parameterizedStatusReadOnly": "El estado se calcula a partir de los resultados de la iteración; haga clic para abrir.",

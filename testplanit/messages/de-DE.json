@@ -106,6 +106,7 @@
       "createTag": "Tag erstellen \"{name}\"",
       "noTagsFound": "Keine Tags gefunden",
       "duplicate": "Duplikat",
+      "clone": "Klonen",
       "exportPdf": "PDF exportieren",
       "exportingPdf": "Exportieren...",
       "change": "Ändern",
@@ -2631,6 +2632,12 @@
       "createTestRun": "Testlauf erstellen",
       "addToRunDraftBlocked": "Entwurfsfälle können nicht zu Testläufen hinzugefügt werden, solange die Option „Entwurfsfälle von Testläufen ausschließen“ für dieses Projekt aktiviert ist.",
       "copyMoveToProject": "Kopieren / Verschieben",
+      "cloneCase": {
+        "inProgress": "Testfall wird geklont...",
+        "success": "Testfall geklont",
+        "error": "Testfall konnte nicht geklont werden",
+        "openClone": "Klon öffnen"
+      },
       "export": "Export",
       "quickScript": "QuickScript",
       "parameterizedStatusReadOnly": "Der Status wird aus den Iterationsergebnissen berechnet – zum Öffnen klicken",

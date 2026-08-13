@@ -106,6 +106,7 @@
       "createTag": "建立標籤“{name}”",
       "noTagsFound": "未找到標籤",
       "duplicate": "複製",
+      "clone": "建立複本",
       "exportPdf": "匯出PDF",
       "exportingPdf": "出口...",
       "change": "改變",
@@ -2631,6 +2632,12 @@
       "createTestRun": "建立測試運行",
       "addToRunDraftBlocked": "如果此專案的「從測試執行中排除草稿案例」選項已啟用，則無法將草稿案例新增至執行階段。",
       "copyMoveToProject": "複製/移動",
+      "cloneCase": {
+        "inProgress": "正在建立測試用例複本...",
+        "success": "已建立測試用例複本",
+        "error": "建立測試用例複本失敗",
+        "openClone": "開啟複本"
+      },
       "export": "出口",
       "quickScript": "QuickScript",
       "parameterizedStatusReadOnly": "狀態由迭代結果計算得出——點擊打開",
